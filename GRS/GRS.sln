@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRS.UnitTests", "GRS.UnitTests\GRS.UnitTests.csproj", "{66418BB0-B03B-4F32-BA73-B8E51726BC96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRS.Web", "GRS.Web\GRS.Web.csproj", "{61829124-D5C3-4EF6-ADD6-2B4A12AA998A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66418BB0-B03B-4F32-BA73-B8E51726BC96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66418BB0-B03B-4F32-BA73-B8E51726BC96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66418BB0-B03B-4F32-BA73-B8E51726BC96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66418BB0-B03B-4F32-BA73-B8E51726BC96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61829124-D5C3-4EF6-ADD6-2B4A12AA998A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61829124-D5C3-4EF6-ADD6-2B4A12AA998A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61829124-D5C3-4EF6-ADD6-2B4A12AA998A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61829124-D5C3-4EF6-ADD6-2B4A12AA998A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
