@@ -21,4 +21,26 @@ namespace GRS.Web.Data.Configurations
                    .HasForeignKey(x => x.SkillId);
         }
     }
+    public class CandidateConfiguration : IEntityTypeConfiguration<Candidate>
+    {
+        public void Configure(EntityTypeBuilder<Candidate> builder)
+        {
+            builder
+            .Property(b => b.FirstName)
+            .IsRequired();
+
+            builder
+            .Property(b => b.LastName)
+            .IsRequired();
+        }
+    }
+    public class SkillConfiguration : IEntityTypeConfiguration<Skill>
+    {
+        public void Configure(EntityTypeBuilder<Skill> builder)
+        {
+            builder
+            .Property(b => b.Name)
+            .IsRequired();
+        }
+    }
 }
