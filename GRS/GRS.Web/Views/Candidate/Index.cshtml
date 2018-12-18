@@ -1,13 +1,25 @@
-@model List<CandidateViewModel>
+@model SearchViewModel
 
 @{
     var title = "Candidates";
     ViewData["Title"] = title;
 }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
+<div class="row">
+    
+    <div class="col-md-4">
+        <a asp-action="Create">Create New</a>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="Search">
+            <select asp-for="SkillId" asp-items="ViewBag.AllSkills">
+                <option disabled selected>--- SKILL ---</option>
+            </select>
+            <input type="submit" value="Search" class="btn btn-default" />
+        </form>
+    </div>
+</div>
 
 <table class="table">
     <thead>
@@ -25,7 +37,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Candidates)
         {
         <tr>
             <td>

@@ -29,8 +29,29 @@ namespace GRS.Web.Controllers
                                         .Include(x => x.CandidateSkills)
                                             .ThenInclude(x => x.Skill)
                                         .ToListAsync();
-            var viewModel = candidates.Select(x => new CandidateViewModel(x)).ToList();
+
+            var viewModel = new SearchViewModel
+            {
+                Candidates = candidates.Select(x => new CandidateViewModel(x)).ToList()
+            };
+            await PrepareViewBagAsync();
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(SearchViewModel viewModel)
+        {
+            var candidates = await _context.Candidates
+                                        .Where(x => viewModel.SkillId == null ||
+                                             x.CandidateSkills.Any(y => y.SkillId == viewModel.SkillId))
+                                        .OrderBy(x => x.LastName + ", " + x.FirstName)
+                                        .Include(x => x.CandidateSkills)
+                                            .ThenInclude(x => x.Skill)
+                                        .ToListAsync();
+            viewModel.Candidates = candidates.Select(x => new CandidateViewModel(x)).ToList();
+            await PrepareViewBagAsync();
+            return View(nameof(Index), viewModel);
         }
 
         // GET: Candidate/Details/5

@@ -38,11 +38,106 @@ namespace GRS.UnitTests.Controller
             var controller = new CandidateController(contextCreator());
 
             var result = (await controller.Index()) as ViewResult;
-            var model = (List<CandidateViewModel>) result.Model;
+            var model = (SearchViewModel) result.Model;
 
-            Assert.AreEqual("TestFirstName", model.Single().FirstName);
-            Assert.AreEqual("TestLastName", model.Single().LastName);
+            Assert.AreEqual("TestFirstName", model.Candidates.Single().FirstName);
+            Assert.AreEqual("TestLastName", model.Candidates.Single().LastName);
         }
+
+        [Test]
+        public async Task Search_View_IsIndex()
+        {
+            var contextCreator = Helper.InMemoryContextCreator();
+
+            var controller = new CandidateController(contextCreator());
+
+            var result = (await controller.Search(new SearchViewModel())) as ViewResult;
+            var model = (SearchViewModel)result.Model;
+
+            Assert.AreEqual(nameof(CandidateController.Index), result.ViewName);
+        }
+
+        [Test]
+        public async Task Search_CandidateWithSelectedSkill_IsShown()
+        {
+            var contextCreator = Helper.InMemoryContextCreator();
+
+            using (var context = contextCreator())
+            {
+                await context.AddAsync(new Candidate
+                {
+                    Id = 1,
+                });
+
+                await context.AddAsync(new CandidateSkill
+                {
+                    CandidateId = 1,
+                    SkillId = 1,
+                });
+
+                await context.AddAsync(new Skill
+                {
+                    Id = 1,
+                });
+
+                await context.SaveChangesAsync();
+            }
+
+            var controller = new CandidateController(contextCreator());
+
+            var result = (await controller.Search(new SearchViewModel { SkillId = 1})) as ViewResult;
+            var model = (SearchViewModel)result.Model;
+
+            Assert.AreEqual(1, model.Candidates.Count());
+        }
+
+        [Test]
+        public async Task Search_CandidateWithOutSkill_IsNotShown()
+        {
+            var contextCreator = Helper.InMemoryContextCreator();
+
+            using (var context = contextCreator())
+            {
+                await context.AddAsync(new Candidate
+                {
+                    Id = 1,
+                });
+
+                await context.SaveChangesAsync();
+            }
+
+            var controller = new CandidateController(contextCreator());
+
+            var result = (await controller.Search(new SearchViewModel { SkillId = 1 })) as ViewResult;
+            var model = (SearchViewModel)result.Model;
+
+            Assert.AreEqual(0, model.Candidates.Count());
+        }
+        [Test]
+        public async Task Search_SkillIsNotSelected_CandidateIsShown()
+        {
+            var contextCreator = Helper.InMemoryContextCreator();
+
+            using (var context = contextCreator())
+            {
+                await context.AddAsync(new Candidate
+                {
+                    Id = 1,
+                    FirstName = "TestFirstName",
+                    LastName = "TestLastName"
+                });
+
+                await context.SaveChangesAsync();
+            }
+
+            var controller = new CandidateController(contextCreator());
+
+            var result = (await controller.Search(new SearchViewModel ())) as ViewResult;
+            var model = (SearchViewModel)result.Model;
+
+            Assert.AreEqual(1, model.Candidates.Count());
+        }
+
 
         [Test]
         public async Task Details_SingleCandidate_IsShown()
@@ -134,7 +229,6 @@ namespace GRS.UnitTests.Controller
 
             Assert.AreEqual(nameof(CandidateController.Index), result.ActionName);
         }
-
 
         [Test]
         public async Task Edit_SingleCandidate_IsShown()
