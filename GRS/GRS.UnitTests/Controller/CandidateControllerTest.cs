@@ -166,7 +166,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Details_IdIsNull_RederedtToIndex()
+        public async Task Details_IdIsNull_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -178,7 +178,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Details_InvalidId_RederedtToIndex()
+        public async Task Details_InvalidId_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -204,7 +204,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task CreatePost_ModelStateInvalid_RederedtToIndex()
+        public async Task CreatePost_ModelStateInvalid_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -257,7 +257,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Edit_IdIsNull_RederedtToIndex()
+        public async Task Edit_IdIsNull_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -269,7 +269,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Edit_InvalidId_RederedtToIndex()
+        public async Task Edit_InvalidId_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -306,7 +306,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task EditPost_IdIsNotConsistent_RederedtToIndex()
+        public async Task EditPost_IdIsNotConsistent_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -318,7 +318,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task EditPost_ModelStateInvalid_RederedtToIndex()
+        public async Task EditPost_ModelStateInvalid_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -393,7 +393,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Delete_IdIsNull_RederedtToIndex()
+        public async Task Delete_IdIsNull_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -405,7 +405,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Delete_InvalidId_RederedtToIndex()
+        public async Task Delete_InvalidId_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 

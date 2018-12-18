@@ -65,7 +65,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Details_IdIsNull_RederedtToIndex()
+        public async Task Details_IdIsNull_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -77,7 +77,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Details_InvalidId_RederedtToIndex()
+        public async Task Details_InvalidId_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -86,6 +86,47 @@ namespace GRS.UnitTests.Controller
             var result = (await controller.Details(1)) as NotFoundResult;
 
             Assert.NotNull(result);
+        }
+
+        [Test]
+        public async Task Create_Candidate_IsNull()
+        {
+            var contextCreator = Helper.InMemoryContextCreator();
+
+            var controller = new CandidateController(contextCreator());
+
+            var model = new CandidateViewModel();
+            var result = (await controller.Create()) as ViewResult;
+            var resultModel = (CandidateViewModel)result.Model;
+
+            Assert.IsNull(resultModel);
+        }
+
+        [Test]
+        public async Task CreatePost_ModelStateInvalid_RederectedToIndex()
+        {
+            var contextCreator = Helper.InMemoryContextCreator();
+
+            var controller = new CandidateController(contextCreator());
+            controller.ModelState.AddModelError("TestError", "TestErrorMessage");
+
+            var model = new CandidateViewModel();
+            var result = (await controller.Create(model)) as ViewResult;
+            var resultModel = (CandidateViewModel)result.Model;
+
+            Assert.AreSame(model, resultModel);
+        }
+
+        [Test]
+        public async Task CreatePost_SingleCandidate_RedirectedToIndex()
+        {
+            var contextCreator = Helper.InMemoryContextCreator();
+
+            var controller = new CandidateController(contextCreator());
+
+            var result = (await controller.Create(new CandidateViewModel())) as RedirectToActionResult;
+
+            Assert.AreEqual(nameof(CandidateController.Index), result.ActionName);
         }
 
         [Test]
@@ -113,7 +154,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Edit_IdIsNull_RederedtToIndex()
+        public async Task Edit_IdIsNull_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -125,7 +166,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Edit_InvalidId_RederedtToIndex()
+        public async Task Edit_InvalidId_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -161,7 +202,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task EditPost_IdIsNotConsistent_RederedtToIndex()
+        public async Task EditPost_IdIsNotConsistent_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -173,12 +214,12 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task EditPost_ModelStateInvalid_RederedtToIndex()
+        public async Task EditPost_ModelStateInvalid_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
             var controller = new SkillController(contextCreator());
-            controller.ModelState.AddModelError("TetsError", "TetsErrorMessage");
+            controller.ModelState.AddModelError("TestError", "TestErrorMessage");
 
             var model = new SkillViewModel { Id = 1 };
             var result = (await controller.Edit(1, model)) as ViewResult;
@@ -247,7 +288,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Delete_IdIsNull_RederedtToIndex()
+        public async Task Delete_IdIsNull_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
@@ -259,7 +300,7 @@ namespace GRS.UnitTests.Controller
         }
 
         [Test]
-        public async Task Delete_InvalidId_RederedtToIndex()
+        public async Task Delete_InvalidId_RederectedToIndex()
         {
             var contextCreator = Helper.InMemoryContextCreator();
 
