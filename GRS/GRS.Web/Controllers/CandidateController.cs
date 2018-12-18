@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GRS.Web.Common;
@@ -6,6 +7,7 @@ using GRS.Web.Data;
 using GRS.Web.Data.Models;
 using GRS.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace GRS.Web.Controllers
@@ -23,6 +25,7 @@ namespace GRS.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var candidates = await _context.Candidates
+                                        .OrderBy(x => x.LastName + ", " + x.FirstName)
                                         .Include(x => x.CandidateSkills)
                                             .ThenInclude(x => x.Skill)
                                         .ToListAsync();
@@ -49,8 +52,9 @@ namespace GRS.Web.Controllers
         }
 
         // GET: Candidate/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await PrepareViewBagAsync();
             return View();
         }
 
@@ -63,7 +67,7 @@ namespace GRS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await UpdateCandidateAsync(_context, viewModel);
+                await UpdateCandidateAsync(viewModel);
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,6 +91,7 @@ namespace GRS.Web.Controllers
             }
 
             var viewModel = new CandidateViewModel(model);
+            await PrepareViewBagAsync();
             return View(viewModel);
         }
 
@@ -106,7 +111,7 @@ namespace GRS.Web.Controllers
             {
                 try
                 {
-                    await UpdateCandidateAsync(_context, viewModel);
+                    await UpdateCandidateAsync(viewModel);
 
                     await _context.SaveChangesAsync();
                 }
@@ -124,6 +129,7 @@ namespace GRS.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            await PrepareViewBagAsync();
             return View(viewModel);
         }
 
@@ -153,24 +159,23 @@ namespace GRS.Web.Controllers
         }
 
         public async Task<Candidate> UpdateCandidateAsync(
-        ApplicationDbContext context,
         CandidateViewModel candidateViewModel
         )
         {
-            var candidate = (await context.Candidates.FindAsync(candidateViewModel?.Id)) ?? new Candidate();
+            var candidate = await GetCandidateAsync(candidateViewModel.Id) ?? new Candidate();
 
             candidate.FirstName = candidateViewModel.FirstName;
             candidate.LastName = candidateViewModel.LastName;
 
-            context.AddOrUpdate(candidate);
+            _context.AddOrUpdate(candidate);
 
-            context.UpdateEntities(
+            _context.UpdateEntities(
                 candidate.CandidateSkills,
                 candidateViewModel.Skills
                     .Select(y => new CandidateSkill
                     {
                         Candidate = candidate,
-                        SkillId = (int)y.Id
+                        SkillId = y
                     }).ToList(),
                  x => x.SkillId);
 
@@ -183,6 +188,20 @@ namespace GRS.Web.Controllers
                             .Include(x => x.CandidateSkills)
                                 .ThenInclude(x => x.Skill)
                             .SingleOrDefaultAsync(m => m.Id == id);
+        }
+
+        private async Task PrepareViewBagAsync()
+        {
+            ViewBag.AllSkills =
+                        await _context.Skills
+                            .OrderBy(x => x.Name)
+                            .Select(x =>
+                            new SelectListItem
+                            {
+                                Text = x.Name,
+                                Value = x.Id.ToString()
+                            })
+                         .ToListAsync();
         }
     }
 }

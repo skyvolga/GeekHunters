@@ -190,7 +190,8 @@ namespace GRS.UnitTests.Controller
         [Test]
         public void EditPost_DbUpdateConcurrencyExceptionAndSkillExists_ThrowException()
         {
-            var contextMock = new Mock<ApplicationDbContext>();
+            var contextOptions = new DbContextOptions<ApplicationDbContext>();
+            var contextMock = new Mock<ApplicationDbContext>(contextOptions);
             contextMock.Setup(x => x.Skills).Returns(Helper.GetQueryableMockDbSet(new Skill { Id = 1 }));
             contextMock.Setup(x => x.Entry(It.IsAny<object>()))
             .Throws(new DbUpdateConcurrencyException("exception",
@@ -207,7 +208,8 @@ namespace GRS.UnitTests.Controller
         [Test]
         public async Task EditPost_DbUpdateConcurrencyExceptionAnd_NOT_SkillExists_NotFoundIsShown()
         {
-            var contextMock = new Mock<ApplicationDbContext>();
+            var contextOptions = new DbContextOptions<ApplicationDbContext>();
+            var contextMock = new Mock<ApplicationDbContext>(contextOptions);
             contextMock.Setup(x => x.Skills).Returns(Helper.GetQueryableMockDbSet(new Skill { Id = 2 }));
             contextMock.Setup(x => x.Entry(It.IsAny<object>()))
             .Throws(new DbUpdateConcurrencyException("exception",

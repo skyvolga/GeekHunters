@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using GRS.Web.Data;
 using GRS.Web.Data.Models;
@@ -10,7 +11,7 @@ namespace GRS.Web.Models
     {
         public CandidateViewModel()
         {
-            Skills = new List<SkillViewModel>();
+            Skills = new List<int>();
         }
 
         public CandidateViewModel(Candidate candidate)
@@ -19,8 +20,11 @@ namespace GRS.Web.Models
             FirstName = candidate.FirstName;
             LastName = candidate.LastName;
             Skills = candidate.CandidateSkills
-            .Select(x => new SkillViewModel(x.Skill))
-                .ToList();
+                        .Select(x => x.SkillId)
+                        .ToList();
+
+            JoinedSkillNames = string.Join(", ", candidate.CandidateSkills
+                            .Select(x => x.Skill.Name));
         }
 
         public int? Id { get; set; }
@@ -29,6 +33,10 @@ namespace GRS.Web.Models
 
         public string LastName { get; set; }
 
-        public List<SkillViewModel> Skills { get; set; }
+        public List<int> Skills { get; set; }
+
+        [Display(Name ="Skills")]
+
+        public string JoinedSkillNames { get; set; }
     }
 }

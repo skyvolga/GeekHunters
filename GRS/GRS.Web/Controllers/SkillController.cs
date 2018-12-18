@@ -22,7 +22,9 @@ namespace GRS.Web.Controllers
         // GET: Skill
         public async Task<IActionResult> Index()
         {
-            var skills = await _context.Skills.ToListAsync();
+            var skills = await _context.Skills
+                                    .OrderBy(x => x.Name)
+                                    .ToListAsync();
             var viewModel = skills.Select(x => new SkillViewModel(x)).ToList();
             return View(viewModel);
         }
